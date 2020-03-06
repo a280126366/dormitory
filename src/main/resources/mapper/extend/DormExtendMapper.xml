@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.apps.dao.extend.DormExtendMapper">
+	<select id="selectStudent" parameterType="String" resultMap="com.apps.dao.StudentMapper.BaseResultMap">
+		SELECT stu_name
+		FROM student
+		WHERE stu_dor_id=#{id}
+	</select>
+  <resultMap id="DormExtendResultMap" type="com.apps.bean.extend.DormExtend" extends="com.apps.dao.DormMapper.BaseResultMap">
+    <collection property="students" column="stu_dor_id" select="selectStudent"></collection>
+  </resultMap>
+  <select id="selectDormByHouIdAll" resultMap="com.apps.dao.DormMapper.BaseResultMap">
+  	SELECT *
+  	FROM dorm
+  	WHERE
+  		dor_houid=#{id}
+  </select>
+  <select id="selectDormExtendById" resultMap="DormExtendResultMap">
+  	SELECT *
+  	FROM dorm d left outer join student s on d.dor_id=s.stu_dorid
+  	WHERE
+  	 	d.dor_id=#{id}
+  	GROUP BY d.dor_id
+  </select>
+</mapper>

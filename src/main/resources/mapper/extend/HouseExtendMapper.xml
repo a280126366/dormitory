@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.apps.dao.extend.HouseExtendMapper">
+	<select id="selectEmployee" parameterType="String" resultMap="com.apps.dao.EmployeeMapper.BaseResultMap">
+		SELECT *
+		FROM employee
+		WHERE em_houid=#{id}
+	</select>
+  <resultMap id="HouseExtendResultMap" type="com.apps.bean.extend.HouseExtend" extends="com.apps.dao.HouseMapper.BaseResultMap">
+    <collection property="employee" column="em_houid" select="selectEmployee"></collection>
+  </resultMap>
+  <select id="selectHouseExtendAll" resultMap="HouseExtendResultMap">
+  	SELECT *
+  	FROM house h left outer join employee e on h.hou_id=e.em_houid
+  	GROUP BY h.hou_id
+  </select>
+  <select id="selectHouseExtendById" resultMap="HouseExtendResultMap">
+  	SELECT *
+  	FROM house h left outer join employee e on h.hou_id=e.em_houid
+  	WHERE
+  	 	h.hou_id=#{id}
+  	GROUP BY h.hou_id
+  </select>
+</mapper>
